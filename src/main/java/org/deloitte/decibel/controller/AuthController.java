@@ -35,7 +35,7 @@ import org.xml.sax.SAXException;
 public class AuthController {
 	
 /*static final Properties properties = new Properties();
-	
+	//Hello
 	static
 	{
 		try 
