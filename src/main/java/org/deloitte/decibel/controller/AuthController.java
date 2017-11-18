@@ -158,7 +158,7 @@ public class AuthController {
                  String result = EntityUtils.toString(response.getEntity());
                  System.out.println("rest.."+result);         
                 
-                 String projsURL = "https://trackotrack.atlassian.net/rest/api/2/issue/DL-10";
+                 String projsURL = "https://trackotrack.atlassian.net/rest/api/2/project";
                 
                  HttpClient authClientProj = HttpClientBuilder.create().build();
                  HttpPost get = new HttpPost(projsURL);
@@ -171,7 +171,7 @@ public class AuthController {
                  String projsResult = EntityUtils.toString(responseProjs.getEntity());
                   System.out.println("projsResult.."+projsResult);
 
-                 return projsResult;
+                 return result;
     }
 	
 
