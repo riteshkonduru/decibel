@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -131,6 +133,46 @@ public class AuthController {
 	    //return "redirect:/resources/scripts/static.html";
 	    
 	}
+	@RequestMapping(value = "/auth1", method = RequestMethod.GET, headers = "Accept=application/json")
+    public @ResponseBody String authUser1() throws ClientProtocolException, IOException, ParserConfigurationException,
+                               SAXException, XPathExpressionException, JSONException {
+                
+                
+                
+                 String authUrl = "https://trackotrack.atlassian.net/rest/auth/1/session";
+
+                 HttpClient authClient = HttpClientBuilder.create().build();
+                 HttpPost post = new HttpPost(authUrl);
+                
+                 JSONObject jObject = new JSONObject();
+                 jObject.put("username", "neelsindwani@gmail.com");
+                 jObject.put("password", "Nov@2017ns");
+                
+                 String userandpass = jObject.toString();
+
+                 HttpEntity entity = new ByteArrayEntity(userandpass.getBytes());
+                 post.setHeader("Accept", "application/json");
+                 post.setHeader("Content-type", "application/json");
+                 post.setEntity(entity);
+                 HttpResponse response = authClient.execute(post);
+                 String result = EntityUtils.toString(response.getEntity());
+                 System.out.println("rest.."+result);         
+                
+                 String projsURL = "https://trackotrack.atlassian.net/rest/api/2/issue/DL-10";
+                
+                 HttpClient authClientProj = HttpClientBuilder.create().build();
+                 HttpPost get = new HttpPost(projsURL);
+                
+                
+                 get.setHeader("Accept", "application/json");
+                 get.setHeader("Content-type", "application/json");
+                 get.setHeader("-u", "neelsindwani@gmail.com:Nov@2017ns");
+                 HttpResponse responseProjs = authClientProj.execute(get);
+                 String projsResult = EntityUtils.toString(responseProjs.getEntity());
+                  System.out.println("projsResult.."+projsResult);
+
+                 return projsResult;
+    }
 	
 
 }
