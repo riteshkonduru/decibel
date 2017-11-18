@@ -159,7 +159,7 @@ public class AuthController {
                  System.out.println("rest.."+result);         
                 
                  String projsURL = "https://trackotrack.atlassian.net/rest/api/2/project";
-                
+                //https://trackotrack.atlassian.net/rest/api/2/issue/DL-10
                  HttpClient authClientProj = HttpClientBuilder.create().build();
                  HttpPost get = new HttpPost(projsURL);
                 
