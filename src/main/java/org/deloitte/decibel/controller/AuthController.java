@@ -116,19 +116,19 @@ public class AuthController {
 		}
 
 		System.out.println("--------------------------------------------------");
-		return "index";
+		return "index";//this call JSP page
 	}
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index() {
 		System.out.println("=====================================");
-	    return "index";
+	    return "index";//this call JSP page
 	}
 	
 	@RequestMapping(value = "/static", method = RequestMethod.GET, produces = "text/html")
 	public String index1() {
 		System.out.println("=====================================Ritesh");
-		return "redirect:/pages/index2.html";
+		return "redirect:/pages/index2.html"; //this calls static html page
 		//return "redirect:/pages/static.html";
 	    //return "redirect:/resources/scripts/static.html";
 	    
