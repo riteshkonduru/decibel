@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Anthem Dashboard :Natural Language Generation</title>
+    <script type="text/javascript" src="http://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
+    <!--script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script-->
+    <script type="text/javascript">
+        var viz, sheet, table;
+        var reportAttributes;
+        var reportAttributesArray = [];
+
+        function getReportAttributesForDashboard(part) {
+            function readTextFile(file,callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    callback(rawFile.responseText);
+                }
+            }
+            rawFile.send(null);
+        }
+
+            readTextFile("https://raw.githubusercontent.com/moawasthi/TableauIntegration/master/AnthemDashboard.json", function(text) {
+                //console.log(part);
+                var data = JSON.parse(text);
+
+                //console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    reportAttributes = {
+                        dashboard: data[i].tableaumetrics.dashboard,
+                        reportUrl: data[i].tableaumetrics.reportUrl,
+                        sheetName: data[i].tableaumetrics.dashboardPart,
+                        columnName: data[i].tableaumetrics.columnName,
+                        columnValue: data[i].tableaumetrics.columnValue
+                    };
+                    reportAttributesArray.push(reportAttributes);
+                }
+
+
+                console.log(reportAttributesArray);
+
+
+                initViz(part);
+                //console.log(reportAttributes);
+            });
+        }
+
+        function wait(ms) {
+                //console.log("waiting...")
+                var start = new Date().getTime();
+                var end = start;
+                while (end < start + ms) {
+                    end = new Date().getTime();
+                }
+            }
+            //console.log(reportAttributes);
+        function getActiveDashBoardPart(part) {
+            for (var i = 0; i < reportAttributesArray.length; i++) {
+                console.log(part);
+                if (reportAttributesArray[i].sheetName == part) {
+                    reportAttributes = {
+                        dashboard: reportAttributesArray[i].dashboard,
+                        reportUrl: reportAttributesArray[i].reportUrl,
+                        sheetName: reportAttributesArray[i].sheetName,
+                        columnName: reportAttributesArray[i].columnName,
+                        columnValue: reportAttributesArray[i].columnValue
+                    };
+                    getSummaryData();
+                }
+
+            }
+
+        }
+
+
+      
+
+        //google.charts.load('current', {'packages':['corechart']});
+        function initViz(part) {
+            var urlForDashboard;
+            for(var i =0; i< reportAttributesArray.length;i++)
+            {
+                if(reportAttributesArray[i].dashboard == part)
+                {
+                    urlForDashboard = reportAttributesArray[i].reportUrl;
+                }
+            }
+            //var a = reportAttributesArray.forEach(findReportAttributePart(part));
+            var containerDiv = document.getElementById("vizContainer"),
+                url = urlForDashboard,
+                options = {
+                    hideTabs: true,
+                    hideToolbar: true,
+                    onFirstInteractive: function() {
+                        // document.getElementById('getData').disabled = false; // Enable our button
+                    }
+                };
+            if(typeof viz === "undefined")
+              {
+                viz = new tableau.Viz(containerDiv, url, options);
+              }
+            else
+            {
+                viz.dispose();
+                viz = new tableau.Viz(containerDiv, url, options);
+            }
+            
+        }
+
+        function moduleFilter(module) {
+            var sheet = viz.getWorkbook().getActiveSheet();
+            if (module === "") {
+                sheet.clearFilterAsync("Start Date");
+            } else {
+                sheet = viz.getWorkbook().getActiveSheet().getWorksheets().get(reportAttributes.sheetName);
+                sheet.applyFilterAsync("Module", module, tableau.FilterUpdateType.REPLACE);
+            }
+        }
+
+        function dateFilter(date) {
+            var workbook = viz.getWorkbook();
+            workbook.changeParameterValueAsync("Starting Month", date);
+        }
+
+        function getSummaryData() {
+            var finalOutput = [];
+            var finalObject;
+            var finalObjectArray = [];
+            if(reportAttributes.dashboard == "Home" || reportAttributes.dashboard == "ETL")
+            sheet = viz.getWorkbook().getActiveSheet().getWorksheets().get(reportAttributes.sheetName);
+            //If the active sheet is not a dashboard, then you can just enter:
+            else if(reportAttributes.dashboard == "Incidents Trends Summary")
+            {
+                console.log(reportAttributes.sheetName);
+                console.log(viz.getWorkbook().getActiveSheet().getWorksheets().get(reportAttributes.sheetName));
+                sheet =  viz.getWorkbook().getActiveSheet();
+            }
+            
+            options = {
+                maxRows: 0, // Max rows to return. Use 0 to return all rows
+                ignoreAliases: false,
+                ignoreSelection: true,
+                includeAllColumns: false
+            };
+
+            sheet.getSummaryDataAsync(options).then(function(t) {
+                table = t;
+                var tcol = table.getColumns();
+                //the data returned from the tableau API
+                var columns = table.getColumns();
+                var datafromTableau = table.getData();
+                var getIndexAttributes = [];
+                //var vartemplate = new vartemplate();
+                //console.log(reportAttributes.columnName);
+                //console.log(columns);
+                for (var i = 0; i < columns.length; i++) {
+                    //console.log(columns[i].$0.$1);
+                    //console.log(reportAttributes.columnName);
+                    for (var j = 0; j < reportAttributes.columnName.length; j++) {
+                        //console.log(reportAttributes)
+                        //console.log(columns[i].$0.$1 );
+                        //console.log(reportAttributes.columnName[j]);
+                        if (columns[i].$0.$1 == reportAttributes.columnName[j])
+                            getIndexAttributes.push(columns.indexOf(columns[i]));
+                    }
+                }
+                //console.log(getIndexAttributes);
+                for (var k = 0; k < datafromTableau.length; k++) {
+                    for (var m = 0; m < datafromTableau[k].length; m++) {
+                        //console.log(datafromTableau[k][m]);
+                        for (var l = 0; l < getIndexAttributes.length; l++) {
+                            if (m == getIndexAttributes[l]) {
+                                //console.log(datafromTableau[k][m]);
+                                finalOutput.push(datafromTableau[k][m]);
+                            }
+                        }
+                    }
+                }
+                console.log(finalOutput);
+                getdataFromTableauDashboard(finalOutput);
+            });
+
+            function getdataFromTableauDashboard(callback) {
+                if (reportAttributes.sheetName == "Incidents Home2" || reportAttributes.sheetName == "Service Request Summary") {
+
+                    for (var j = 0; j < finalOutput.length - 2; j = j + 3) {
+                        finalObject = new Object();
+                        //finalOutput[j].formattedValue
+                        // console.log(finalOutput[j+1].formattedValue);
+                        //console.log(finalOutput[j+2].formattedValue);
+                        finalObject.MeasureName = finalOutput[j].formattedValue;
+                        finalObject.Complexity = finalOutput[j + 1].formattedValue;
+                        finalObject.MeasureValue = finalOutput[j + 2].value;
+                        finalObject.dashboard = reportAttributes.dashboard;
+                        console.log(finalObject);
+                        finalObjectArray.push(finalObject);
+
+                    }
+                }
+                //console.log(finalOutput);
+                // console.log(reportAttributes);
+                if (reportAttributes.dashboard == "ETL") {
+                    for (var i = 0; i < finalOutput.length - 3; i = i + 4) {
+                        finalObject = new Object();
+                        // console.log(finalOutput[i].formattedValue + finalOutput[i+1].formattedValue);
+                        finalObject.Application = finalOutput[i].formattedValue;
+                        finalObject.ETL_STTS = finalOutput[i + 1].formattedValue;
+                        finalObject.Module = finalOutput[i + 2].formattedValue;
+                        finalObject.Value = finalOutput[i + 3].formattedValue;
+                        finalObjectArray.push(finalObject);
+                    }
+                    //console.log(finalObjectArray);
+                }
+                var textTemplate = "<h4>Summary Data:</h4><p>";
+                var msgTemplate;
+                var finalText;
+
+                //console.log(finalOutput);     
+                //finalObjectArray.sort(function(a,b) {return a.SortKey - b.SortKey;} )
+                // console.log(finalObjectArray);
+                if (reportAttributes.sheetName == "Incidents Home2" || reportAttributes.sheetName == "Service Request Summary")
+                    msgTemplate = {
+                        "P5O": 0,
+                        "P4O": 0,
+                        "P3O": 0,
+                        "P5N": 0,
+                        "P4N": 0,
+                        "P3N": 0,
+                        "P5C": 0,
+                        "P4C": 0,
+                        "P3C": 0,
+                        "P5OE": 0,
+                        "P4OE": 0,
+                        "P3OE": 0,
+                    }; //initializing object, in case no values come from Tableau API.
+
+
+                //console.log(finalObjectArray);   
+                if (reportAttributes.sheetName == "Incidents Home2" || reportAttributes.sheetName == "Service Request Summary") {
+                    for (var i = 0; i < finalObjectArray.length; i++) {
+                        //console.log(finalObjectArray[i]);
+                        msgTemplate.dashboard = finalObjectArray[i].dashboard;
+                        if (finalObjectArray[i].MeasureName == "Open At Beginning") {
+
+                            if (finalObjectArray[i].Complexity == "Priority 5" || finalObjectArray[i].Complexity == "High")
+                                msgTemplate.P5O = parseInt(finalObjectArray[i].MeasureValue);
+                            // console.log(msgTemplate);
+                            if (finalObjectArray[i].Complexity == "Priority 4" || finalObjectArray[i].Complexity == "Medium")
+                                msgTemplate.P4O = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 3" || finalObjectArray[i].Complexity == "Low")
+                                msgTemplate.P3O = parseInt(finalObjectArray[i].MeasureValue);
+                            msgTemplate.TotalO = msgTemplate.P5O + msgTemplate.P4O + msgTemplate.P3O;
+
+                        }
+                        if (finalObjectArray[i].MeasureName == "New Created") {
+                            if (finalObjectArray[i].Complexity == "Priority 5" || finalObjectArray[i].Complexity == "High")
+                                msgTemplate.P5N = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 4" || finalObjectArray[i].Complexity == "Medium")
+                                msgTemplate.P4N = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 3" || finalObjectArray[i].Complexity == "Low")
+                                msgTemplate.P3N = parseInt(finalObjectArray[i].MeasureValue);
+                            msgTemplate.TotalN = msgTemplate.P5N + msgTemplate.P4N + msgTemplate.P3N;
+
+                        }
+
+                        if (finalObjectArray[i].MeasureName == "Closed") {
+                            if (finalObjectArray[i].Complexity == "Priority 5" || finalObjectArray[i].Complexity == "High")
+                                msgTemplate.P5C = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 4" || finalObjectArray[i].Complexity == "Medium")
+                                msgTemplate.P4C = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 3" || finalObjectArray[i].Complexity == "Low")
+                                msgTemplate.P3C = parseInt(finalObjectArray[i].MeasureValue);
+                            msgTemplate.TotalC = msgTemplate.P5C + msgTemplate.P4C + msgTemplate.P3C;
+
+                        }
+
+                        if (finalObjectArray[i].MeasureName == "Open At End") {
+                            if (finalObjectArray[i].Complexity == "Priority 5" || finalObjectArray[i].Complexity == "High")
+                                msgTemplate.P5OE = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 4" || finalObjectArray[i].Complexity == "Medium")
+                                msgTemplate.P4OE = parseInt(finalObjectArray[i].MeasureValue);
+                            if (finalObjectArray[i].Complexity == "Priority 3" || finalObjectArray[i].Complexity == "Low")
+                                msgTemplate.P3OE = parseInt(finalObjectArray[i].MeasureValue);
+                            msgTemplate.TotalOE = msgTemplate.P5OE + msgTemplate.P4OE + msgTemplate.P3OE;
+
+                        }
+                    }
+                }
+                if (reportAttributes.dashboard == "ETL") {
+
+                    finalText = "<h4>Summary Data:</h4><p>"
+                        //finalObjectArray.sort(function(a,b){a.Value > b.Value ? 1: a.Value <b.Value ? -1 :0})
+                    for (var i = 0; i < finalObjectArray.length; i++) {
+                        console.log(finalObjectArray[i].Module + finalObjectArray[i].Application + finalObjectArray[i].ETL_STTS + finalObjectArray[i].Value);
+
+
+                        if (finalObjectArray[i].ETL_STTS == "Passed #") {
+                            finalText += "In Module " + finalObjectArray[i].Module + " for application " + finalObjectArray[i].Application;
+                            finalText += " " + finalObjectArray[i].Value + " have passed."
+                        }
+                    }
+
+                }
+
+                //console.log(finalText);
+                //console.log(msgTemplate.dashboard);
+
+                if (reportAttributes.sheetName == "Incidents Home2") {
+                    finalText = "<h4>Summary Data:</h4><p>" + "At the start of july there were total " + msgTemplate.TotalO +
+                        " incidents in which , " + msgTemplate.P5O + " incidents were of priority 5 ," + msgTemplate.P4O +
+                        " incidents of priority 4 and " + msgTemplate.P3O + " incidents of priority 3. In the whole month of july " + msgTemplate.TotalN +
+                        " incidents were newly created, where " + msgTemplate.P5N + " incidents were of p5, " + msgTemplate.P4N + " of p4 and " + msgTemplate.P3N + " of p3.Out of " +
+                        msgTemplate.TotalN + " new incidents, " + msgTemplate.P5C + " p5 incidents, " + msgTemplate.P4C + " p4 incidents and " + msgTemplate.P3C +
+                        " p3 incidents i.e. total " + msgTemplate.TotalC + " incidents were closed. At last, incidents open at end of july were " + msgTemplate.TotalOE +
+                        ", in which " + msgTemplate.P5OE + " were of p5, " + msgTemplate.P4OE + " of p4 and " + msgTemplate.P3OE + " of p3." + "</p>"
+                        //console.log(finalText);
+                }
+                if (reportAttributes.sheetName == "Service Request Summary") {
+                    finalText = "<h4>Summary Data:</h4><p>" + "At the start of july there were total " + msgTemplate.TotalO +
+                        " service requests in which , " + msgTemplate.P5O + " requests were high ," + msgTemplate.P4O +
+                        " requests were medium and " + msgTemplate.P3O + " requests of low priority. In the whole month of july " + msgTemplate.TotalN +
+                        " requests were newly created, where " + msgTemplate.P5N + " requests were high, " + msgTemplate.P4N + " medium and " + msgTemplate.P3N + " low.Out of " +
+                        msgTemplate.TotalN + " new requests, " + msgTemplate.P5C + " high requests, " + msgTemplate.P4C + " medium requests and " + msgTemplate.P3C +
+                        " low requests i.e. total " + msgTemplate.TotalC + " requests were closed. At last, requests open at end of july were " + msgTemplate.TotalOE +
+                        ", in which " + msgTemplate.P5OE + " were high, " + msgTemplate.P4OE + " medium and " + msgTemplate.P3OE + " low." + "</p>"
+                }
+                //console.log(finalText);
+                var tgt = document.getElementById("dataTarget");
+                console.log(tgt);
+                console.log(finalText);
+                tgt.innerHTML = finalText;
+                //console.log(finalArray);
+                //google.charts.setOnLoadCallback(drawChart(datafromTableau,columns));
+
+
+                //convert to field:values convention
+                /*function reduceToObjects(cols,data) {
+  						var fieldNameMap = $.map(cols, function(col) { return col.$impl.$fieldName; });
+  						var dataToReturn = $.map(data, function(d) {
+    					return d.reduce(function(memo, value, idx) {
+      					memo[fieldNameMap[idx]] = value.formattedValue; return memo;
+    					}, {});
+  						});
+  					return dataToReturn;
+					}*/
+                //var niceData = reduceToObjects(columns, data);
+
+                // Set a callback to run when the Google Visualization API is loaded.
+
+                //console.log(reportAttributes.columnValue);
+                //console.log(finalOutput);
+            }
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page-header">
+        <h2>Anthem Dashboard : Natural Language Generation</h2>
+        <p>Change the dropdowns to view the Natural Language generation</p>
+        Dashboard
+        <select id="dashboardmain" onchange=getReportAttributesForDashboard(value);>
+            <option value="Blank">--SELECT--</option>
+            <option value="Home">Home</option>
+            <option value="Incidents Trends Summary">Incidents Trend Summary</option>
+        </select>
+        Dashboard part :
+        <select id="dashBoardPart" onchange="getActiveDashBoardPart(value);">
+            <option value="Blank">--SELECT--</option>
+            <option value="Incidents Home2">Incidents</option>
+            <option value="Service Request Summary">Service Requests</option>
+            <option value="ETL">ETL</option>
+            <option value="Dashboard Details">Dashboard Details</option>
+            <option value="Incident Priority ">Incidents Priority</option>
+        </select>
+        Module:
+        <select id="changeModule" onchange="moduleFilter(value);">
+            <option value="Select">--SELECT--</option>
+            <option value="Acturial">Acturial</option>
+            <option value="DX">DX</option>
+            <option value="EDM">EDM</option>
+            <option value="BI COE">BI COE</option>
+            <option value="Consumer Products">Consumer Products</option>
+        </select>
+        Date:
+        <select id="changeDate" onchange="dateFilter(value);">
+            <option value="blank">--SELECT--</option>
+            <option value="7/1/2017">July</option>
+            <option value="8/1/2017">August</option>
+            <option value="9/1/2017">Sept</option>
+        </select>
+    </div>
+    <div id="vizContainer"></div>
+    <div id="chart_div"></div>
+    <div id="dataTarget"></div>
+</body>
+
+</html>
