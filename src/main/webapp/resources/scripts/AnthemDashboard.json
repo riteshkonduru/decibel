@@ -1,0 +1,94 @@
+[
+  {
+    "tableaumetrics": {
+      "dashboard": "Home",
+      "reportUrl": "https://tableau.internal.deloitte.com/views/AnthemLODashboard/Home?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no",
+      "dashboardPart": "Service Request Summary",
+      "columnName": [
+        "Measure Names",
+        "Prior Complex ChangeType",
+        "Measure Values"
+      ],
+      "columnValue": [
+        "MeasureName",
+        "Complexity",
+        "MeasureValue"
+      ]
+    }
+  },
+  {
+    "tableaumetrics": {
+      "dashboard": "Home",
+      "reportUrl": "https://tableau.internal.deloitte.com/views/AnthemLODashboard/Home?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no",
+      "dashboardPart": "Incidents Home2",
+      "columnName": [
+        "Measure Names",
+        "Prior Complex ChangeType",
+        "Measure Values"
+      ],
+      "columnValue": [
+        "MeasureName",
+        "Complexity",
+        "MeasureValue"
+      ]
+    }
+  },
+  {
+    "tableaumetrics": {
+      "dashboard": "dashboard Details",
+      "reportUrl": "https://tableau.internal.deloitte.com/views/AnthemLODashboard/Home?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no",
+      "dashboardPart": "Business Impact Hours",
+      "columnName": [
+        "AVG([Business Impact Hours*])"
+      ],
+      "columnValue": [
+        "Business Impact Hours"
+      ]
+    }
+  },
+  {
+    "tableaumetrics": {
+      "dashboard": "dashboard Details",
+      "reportUrl": "https://tableau.internal.deloitte.com/views/AnthemLODashboard/Home?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no",
+      "dashboardPart": "Business Impact Hours",
+      "columnName": [
+        "AVG([In-Scope Application Availability(Uptime %)*])"
+      ],
+      "columnValue": [
+        "Application Availability"
+      ]
+    }
+  },
+  {
+    "tableaumetrics": {
+      "dashboard": "ETL",
+      "reportUrl": "https://tableau.internal.deloitte.com/views/AnthemLODashboard/Home?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no",
+      "dashboardPart": "ETL",
+      "columnName": [
+        "ETL_STTS",
+        "Module",
+        "AGG(ZN(LOOKUP(AVG([Abort %]),0)))",
+        "Application"
+      ],
+      "columnValue": [
+        "Application Availability"
+      ]
+    }
+  },
+    {
+    "tableaumetrics": {
+      "dashboard": "Incidents Trends Summary",
+      "reportUrl": "https://tableau.internal.deloitte.com/views/AnthemLODashboard/IncidentsTrendsSummary?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no#3",
+      "dashboardPart": "Incident Priority ",
+      "columnName": [
+        "Prior Complex ChangeType",
+        "Status",
+        "AGG(ZN(LOOKUP(AVG([Abort %]),0)))",
+        "Application"
+      ],
+      "columnValue": [
+        "Application Availability"
+      ]
+    }
+  }
+]

@@ -24,8 +24,11 @@
             rawFile.send(null);
         }
 
-            readTextFile("https://raw.githubusercontent.com/moawasthi/TableauIntegration/master/AnthemDashboard.json", function(text) {
-                //console.log(part);
+           //readTextFile("https://raw.githubusercontent.com/moawasthi/TableauIntegration/master/AnthemDashboard.json", function(text) {
+            	readTextFile("../resources/scripts/AnthemDashboard.json", function(text) {
+                        
+            	//console.log(part);
+                //../resources/scripts/speech.browser.sdk-min.js
                 var data = JSON.parse(text);
 
                 //console.log(data);

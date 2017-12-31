@@ -133,6 +133,14 @@ public class AuthController {
 	    //return "redirect:/resources/scripts/static.html";
 	    
 	}
+	@RequestMapping(value = "/anthem", method = RequestMethod.GET, produces = "text/html")
+	public String anthem() {
+		System.out.println("=====================================Anthem HTML Ritesh");
+		return "redirect:/pages/AnthemDashboard.html"; //this calls static html page
+		//return "redirect:/pages/static.html";
+	    //return "redirect:/resources/scripts/static.html";
+	    
+	}
 	@RequestMapping(value = "/auth1", method = RequestMethod.GET, headers = "Accept=application/json")
     public @ResponseBody String authUser1() throws ClientProtocolException, IOException, ParserConfigurationException,
                                SAXException, XPathExpressionException, JSONException {
