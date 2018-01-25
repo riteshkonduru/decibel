@@ -31,7 +31,7 @@
             <div style="float: center;margin-top: 90px;margin-left: 40px;">
                 <table style="width:100px">
                     <tr>
-                        <td><input type="hidden" id="key" type="text" size="40" value="a3f26e3133e0477f80b2b30d805fb877"></td>
+                        <td><input type="hidden" id="key" type="text" size="40" value="617b7a295ec54e6da5a018d641b24396"></td>
                     </tr><!-- da516ce671ae4a9da60cb67eac9c14e7 -->
 
                     <tr>
@@ -244,7 +244,7 @@
 			}
 			else if (flag == 2)
 			{
-			setTimeout(voiceoutput, 10000);
+			setTimeout(voiceoutput,Â 10000);
 			}
            
 			}
