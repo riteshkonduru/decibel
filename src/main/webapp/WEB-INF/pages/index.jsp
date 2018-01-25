@@ -244,7 +244,7 @@
 			}
 			else if (flag == 2)
 			{
-			setTimeout(voiceoutput, 10000);
+			setTimeout(voiceoutput,Â 10000);
 			}
            
 			}
