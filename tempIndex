@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DECIBEL</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url('images/bgfinal.png') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            color: #fff;
+            background-color: #333;
+            font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+        }
+        logo_decibel{
+            height: 60px;
+   			 width: 180px;
+        
+        }
+
+      
+    </style>
+
+
+</head>
+<div class="container--fluid">
+<div class="row">
+    <div class="col-lg-6 col-xs-6"><img src="images/Decibel.png" class="logo_decibel"></div>
+    <div class="col-lg-6 col-xs-6">
+      <div class="col-lg-2 col-lg-push-10 col-md-2 col-md-push-0 col-sm-2 col-sm-push-0 col-xs-2 col-xs-push-0">
+        <div class="pull-right"><img src="images/deloitte-logo-print.png"></div>
+      </div>
+    </div>
+
+</div>
+
+<!-- <div class="row">
+<div class="clearfix">
+ <img src="images/Decibel.png" class="pull-left img-responsive">
+ <img src="images/deloitte-logo-print.png" class="pull-right img-responsive">
+</div>
+
+    <div class="col-md-6">
+        <img src="images/Decibel.png" class="pull-left img-responsive">
+     </div>
+     <div class="col-md-6">
+        <img src="images/deloitte-logo-print.png" class="pull-right img-responsive">
+     </div>
+   </div>
+ </div> -->
+
+
+
+
+
+</div>
+
+
+
+
+
+<script src="scripts/require.min.js"></script>
+<!-- <script src="scripts/jquery.min.js"></script>-->
+
+
+<!-- SDK REFERENCE -->
+<script src="scripts/speech.browser.sdk-min.js"></script>
+<script src="scripts/setup-speech-api.js"></script>
+<script src="scripts/tableau-api.js"></script>
+<script src="scripts/tableau-api-getSummary.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" ></script>-->
+
+
+<!-- <body style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px;">
+
+    <img src="images/deloitte-logo-print.png" class="logo_deloitte" alt="Deloitte" style="z-index:999;">
+    <img src="images/Decibel.png" class="logo_decibel" alt="Decibel" height="60px" Width="180px" style="z-index:999;">
+    <h2 class="head1"> Voice Enabled </h2>
+    <h2 class="head2"> Cognitive </h2>
+    <h2 class="head3"> Platform </h2>
+
+    <img src="images/mic.png" id="speakAgainsmall" class="sabutton" hidden="" title="Click to speak again">
+    <img src="images/bgfinal.png" class="bg_img" alt="background">
+    <div class="speak-home">
+        <button id="startBtn" class="stbutton" disabled="disabled" hidden="">Start</button>
+        <button id="stopBtn" class="spbutton" disabled="disabled" hidden="">Stop</button>
+        <center><img src="images/mic.png" id="speakAgainbig" alt="Mic" class="mic" title="Click to speak again"> </center>
+    </div>
+
+    <div style="float: center;margin-top: 90px;margin-left: 40px;">
+        <table width="100%">
+            <tr>
+                <td><input type="hidden" id="key" type="text" size="40" value="a02d3727627c48cb8d6f2477dbd339c6" v></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    <button class="btn btn-primary btn-lg" id="startBtn" disabled="disabled" hidden="">Start</button>
+                    <button  class="btn btn-primary btn-lg"id="stopBtn" disabled="disabled" hidden="">Stop</button>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="vizContainer" style="width:1000px; height:350px; margin-top: 15px;margin-left: 21px;">
+    </div>
+    <div>
+        <div id="toggle-first-sidebar" style="text-align: right;position: absolute;width: 100%;right: 18px;top: 200px;cursor: pointer;">
+            <img src="images/plus.png" width="30px" height="30px">
+            <div class="first-sidebar-content" style="display: none; min-width: 200px">
+                <div style="min-width: 300px;float: right;background-color: #fff;text-align: center;">
+
+                    <div>
+                        <td>Recognized voice: <span id="hypothesisDiv"></span></td>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div id="toggle-second-sidebar" style="text-align: right;position: absolute;width: 100%;right: 18px;top: 400px;cursor: pointer;">
+            <img src="images/plus.png" width="30px" height="30px">
+            <div class="second-sidebar-content" style="display: none; min-width: 200px">
+                <div style="min-width: 300px; float: right;background-color: #fff;text-align: center;">
+                    <div>
+                        <td>
+                            <textarea id="phraseDiv" style="width:300px;height:100px"></textarea>
+                        </td>
+                    </div>
+
+                    <div>
+                        <td>Status: <span id="statusDiv"></span></td>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body> -->
+
+</html>
