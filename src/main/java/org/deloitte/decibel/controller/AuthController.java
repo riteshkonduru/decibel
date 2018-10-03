@@ -36,6 +36,29 @@ import org.xml.sax.SAXException;
 @Controller
 public class AuthController {
 	
+	//this method is to call decibel jsp page
+	//open it in brower using the below link
+	//http://localhost:8080/decibel-service/index
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String index() {
+		System.out.println("=====================================");
+	    return "index";//this call JSP page
+	}
+	//this method is to call decibel html page.
+	//open it in brower using the below link
+	//http://localhost:8080/decibel-service/static
+	@RequestMapping(value = "/static", method = RequestMethod.GET, produces = "text/html")
+	public String index1() {
+		System.out.println("=====================================Ritesh");
+		return "redirect:/pages/index2.html"; //this calls static html page
+		//return "redirect:/pages/static.html";
+	    //return "redirect:/resources/scripts/static.html";
+	    
+	}
+	
+	
+	
+	
 /*static final Properties properties = new Properties();
 	//Hello
 	static
@@ -49,9 +72,7 @@ public class AuthController {
 		{
 			e.printStackTrace();
 		}
-	}*/
-	
-
+	}
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, headers = "Accept=application/json")
 	public String authUser() throws ClientProtocolException, IOException, ParserConfigurationException,
 			SAXException, XPathExpressionException {
@@ -119,20 +140,7 @@ public class AuthController {
 		return "index";//this call JSP page
 	}
 	
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String index() {
-		System.out.println("=====================================");
-	    return "index";//this call JSP page
-	}
 	
-	@RequestMapping(value = "/static", method = RequestMethod.GET, produces = "text/html")
-	public String index1() {
-		System.out.println("=====================================Ritesh");
-		return "redirect:/pages/index2.html"; //this calls static html page
-		//return "redirect:/pages/static.html";
-	    //return "redirect:/resources/scripts/static.html";
-	    
-	}
 	@RequestMapping(value = "/anthem", method = RequestMethod.GET, produces = "text/html")
 	public String anthem() {
 		System.out.println("=====================================Anthem HTML Ritesh");
@@ -182,5 +190,5 @@ public class AuthController {
                  return result;
     }
 	
-
+*/
 }
