@@ -81,8 +81,7 @@ public class AuthController {
 		String site_id = null;
 		HttpClient authClient = HttpClientBuilder.create().build(); 
 		HttpPost post = new HttpPost(authUrl);
-		String pass = "e8Uj@w)&quot;Z5";
-		String name = "sgarripelly";
+
 		String contentUrl = "IAAP";
 		String xml = "<tsRequest><credentials name='" + name + "' password='" + pass + "'><site contentUrl='"
 				+ contentUrl + "'/></credentials></tsRequest>";
@@ -161,8 +160,7 @@ public class AuthController {
                  HttpPost post = new HttpPost(authUrl);
                 
                  JSONObject jObject = new JSONObject();
-                 jObject.put("username", "neelsindwani@gmail.com");
-                 jObject.put("password", "Nov@2017ns");
+
                 
                  String userandpass = jObject.toString();
 
