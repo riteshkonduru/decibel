@@ -16,7 +16,6 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +56,32 @@ public class ElasticSearchExampleApplication {
         restHighLevelClient.close();
         restHighLevelClient = null;
     }
+    public static void main(String[] args) throws IOException {
 
+        makeConnection();
+
+        System.out.println("Inserting a person Test...");
+        Person person = new Person();
+        person.setName("Test");
+        person = insertPerson(person);
+        System.out.println("Person inserted --> " + person);
+
+        System.out.println("Updateing name`...");
+        person.setName("Test2");
+        updatePersonById(person.getPersonId(), person);
+        System.out.println("Person updated  --> " + person);
+
+        System.out.println("Getting test2...");
+        Person personFromDB = getPersonById(person.getPersonId());
+        System.out.println("Person from DB  --> " + personFromDB);
+
+        System.out.println("Deleting Test2...");
+        deletePersonById(personFromDB.getPersonId());
+        System.out.println("Person Deleted");
+
+        closeConnection();
+    }
+   
     private static Person insertPerson(Person person){
         person.setPersonId(UUID.randomUUID().toString());
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -113,30 +137,6 @@ public class ElasticSearchExampleApplication {
         }
     }
 
-    public static void main(String[] args) throws IOException {
 
-        makeConnection();
-
-        System.out.println("Inserting a new Person with name Shubham...");
-        Person person = new Person();
-        person.setName("Shubham");
-        person = insertPerson(person);
-        System.out.println("Person inserted --> " + person);
-
-        System.out.println("Changing name to `Shubham Aggarwal`...");
-        person.setName("Shubham Aggarwal");
-        updatePersonById(person.getPersonId(), person);
-        System.out.println("Person updated  --> " + person);
-
-        System.out.println("Getting Shubham...");
-        Person personFromDB = getPersonById(person.getPersonId());
-        System.out.println("Person from DB  --> " + personFromDB);
-
-        System.out.println("Deleting Shubham...");
-        deletePersonById(personFromDB.getPersonId());
-        System.out.println("Person Deleted");
-
-        closeConnection();
-    }
 
 }
