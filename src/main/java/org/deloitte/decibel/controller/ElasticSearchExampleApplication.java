@@ -4,7 +4,7 @@ package org.deloitte.decibel.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpHost;
-import org.elasticsearch.ElasticsearchException;
+/*import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -15,14 +15,14 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.common.xcontent.XContentType;**/
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class ElasticSearchExampleApplication {
-
+	/*
     //The config parameters for the connection
     private static final String HOST = "localhost";
     private static final int PORT_ONE = 9200;
@@ -39,7 +39,7 @@ public class ElasticSearchExampleApplication {
      * Implemented Singleton pattern here
      * so that there is just one connection at a time.
      * @return RestHighLevelClient
-     */
+     
     private static synchronized RestHighLevelClient makeConnection() {
 
         if(restHighLevelClient == null) {
@@ -66,7 +66,7 @@ public class ElasticSearchExampleApplication {
         person = insertPerson(person);
         System.out.println("Person inserted --> " + person);
 
-        System.out.println("Updateing name`...");
+        System.out.println("Updating name`...");
         person.setName("Test2");
         updatePersonById(person.getPersonId(), person);
         System.out.println("Person updated  --> " + person);
@@ -137,6 +137,6 @@ public class ElasticSearchExampleApplication {
         }
     }
 
-
+*/
 
 }
